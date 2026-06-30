@@ -9,7 +9,7 @@ Feed it a customer's event history and it will:
 3. **Decide the right lifecycle action** via a declarative rule set — onboarding sequence, activation nudge, engagement tip, review request, re-engagement, **CSM hand-off for high-risk accounts**, win-back
 4. **Personalise the copy** — offline templates by default, or drop in an LLM (Claude / OpenAI) provider in production without touching the engine
 
-No runtime dependencies. Fully unit-tested.
+No runtime dependencies — **27 unit tests** across 5 modules covering the core paths.
 
 > Built as a focused demonstration of customer-success / lifecycle engineering: turning raw product signals into the right, timely, personalised touch — automatically.
 
@@ -94,6 +94,10 @@ pytest
 ```
 
 Covers health scoring, stage transitions (including churn and at-risk edges), rule firing (incl. the high-churn CSM escalation), personalisation, and the end-to-end engine.
+
+## Notes
+
+Built with AI assistance (Claude), reviewed and tested by me. The scoring weights and stage thresholds are an illustrative starter heuristic — the constants are exposed at the top of each module so they're easy to tune.
 
 ## License
 
