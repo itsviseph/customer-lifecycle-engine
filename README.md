@@ -115,25 +115,25 @@ The engine above is intentionally tool-agnostic — it's the portable decision l
   | At-risk accounts | `lifecycle_stage = at_risk` | at_risk |
   | Churned – win-back | `lifecycle_stage = churned` | churned |
 
-- **One working journey — "Trial onboarding & activation"** — triggered when a person enters the *Trial – not activated* segment:
-  1. Send a welcome email — Liquid-personalised (`{{customer.first_name}}`, `{{customer.plan}}`)
+- **Four working journeys — one per lifecycle stage.** Each is a segment-triggered automation: an email, a 2-day wait, a True/False branch on `lifecycle_stage` (continue only if the person is still in the stage), then a second, more personal touch — all Liquid-personalised (`{{customer.first_name}}`, `{{customer.plan}}`). For example, *"Trial onboarding & activation"* fires when someone enters *Trial – not activated*:
+  1. Send a welcome email
   2. Wait 2 days
   3. **Branch** on `activated`: still not activated → send an activation nudge; activated → exit.
 
   That's the engine's `new → onboarding → activated` path expressed as a real automation — segment-driven entry, a delay, a conditional branch, and personalised copy.
 
-**How the rest of the model is mapped**
+**The full lifecycle, mapped engine → segment → journey**
 
-Only the onboarding journey is built so far. The other three segments exist and are designed to drive the matching play next — here's the plan, straight from the engine's rule set:
+Every segment triggers its own journey, exactly as the engine's rule set decides:
 
-| Engine stage | Segment | Engine action | customer.io play | Status |
-|---|---|---|---|---|
-| onboarding | Trial – not activated | onboarding + activation nudge | Trial onboarding & activation | **built** |
-| engaged | Engaged customers | request_review | advocacy: review → referral | designed, not yet built |
-| at_risk | At-risk accounts | re-engagement + CSM hand-off | re-engagement, then escalate the still-cold | designed, not yet built |
-| churned | Churned – win-back | win-back | win-back sequence | designed, not yet built |
+| Engine stage | Segment | Engine action | customer.io journey |
+|---|---|---|---|
+| onboarding | Trial – not activated | onboarding + activation nudge | **Trial onboarding & activation** |
+| engaged | Engaged customers | request_review | **Advocacy: reviews & referrals** |
+| at_risk | At-risk accounts | re-engagement + CSM hand-off | **At-risk re-engagement & CSM hand-off** |
+| churned | Churned – win-back | win-back | **Win-back** |
 
-> **Honest scope:** this is a learning / portfolio build in a trial workspace with test data, not a production deployment — one journey is live, the rest are mapped. The repo is the reusable logic; the customer.io workspace shows I can operationalise it — segment by behaviour, branch on state, and personalise the message.
+> **Honest scope:** this is a learning / portfolio build in a trial workspace with test data, not a production deployment — nothing has been sent to a real person. The repo is the reusable logic; the customer.io workspace shows I can operationalise it — segment by behaviour, branch on state, and personalise the message.
 
 ## License
 
