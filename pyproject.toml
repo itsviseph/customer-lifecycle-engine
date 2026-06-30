@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "customer-lifecycle-engine"
+version = "0.1.0"
+description = "A small, explainable customer-lifecycle automation engine: health scoring, stage classification, and rule-driven lifecycle actions with optional LLM-personalised copy."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Vishal Joseph Dsouza" }]
+keywords = ["customer-success", "lifecycle", "churn", "automation", "retention", "saas"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["customer_lifecycle*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
