@@ -99,6 +99,42 @@ Covers health scoring, stage transitions (including churn and at-risk edges), ru
 
 Built with AI assistance (Claude), reviewed and tested by me. The scoring weights and stage thresholds are an illustrative starter heuristic — the constants are exposed at the top of each module so they're easy to tune.
 
+## Bringing it to life in customer.io
+
+The engine above is intentionally tool-agnostic — it's the portable decision logic. To show it works in the kind of platform a lifecycle / customer-success team actually runs, I stood the same model up in a **customer.io** workspace (free trial, **test mode** — fictional people, nothing is sent to anyone real).
+
+**What's live in the workspace today**
+
+- **The five demo customers as People.** The exact customers from `examples/demo.py` — Asha, Ben, Cara, Dev, Eli — exist as People, each carrying the attributes the engine reasons about: `plan`, `activated`, `lifecycle_stage`.
+- **Four data-driven segments**, one per lifecycle stage, defined by conditions on those attributes:
+
+  | Segment | Condition | Engine stage |
+  |---|---|---|
+  | Trial – not activated | `plan = trial` AND `activated = false` | onboarding |
+  | Engaged customers | `lifecycle_stage = engaged` | engaged |
+  | At-risk accounts | `lifecycle_stage = at_risk` | at_risk |
+  | Churned – win-back | `lifecycle_stage = churned` | churned |
+
+- **One working journey — "Trial onboarding & activation"** — triggered when a person enters the *Trial – not activated* segment:
+  1. Send a welcome email — Liquid-personalised (`{{customer.first_name}}`, `{{customer.plan}}`)
+  2. Wait 2 days
+  3. **Branch** on `activated`: still not activated → send an activation nudge; activated → exit.
+
+  That's the engine's `new → onboarding → activated` path expressed as a real automation — segment-driven entry, a delay, a conditional branch, and personalised copy.
+
+**How the rest of the model is mapped**
+
+Only the onboarding journey is built so far. The other three segments exist and are designed to drive the matching play next — here's the plan, straight from the engine's rule set:
+
+| Engine stage | Segment | Engine action | customer.io play | Status |
+|---|---|---|---|---|
+| onboarding | Trial – not activated | onboarding + activation nudge | Trial onboarding & activation | **built** |
+| engaged | Engaged customers | request_review | advocacy: review → referral | designed, not yet built |
+| at_risk | At-risk accounts | re-engagement + CSM hand-off | re-engagement, then escalate the still-cold | designed, not yet built |
+| churned | Churned – win-back | win-back | win-back sequence | designed, not yet built |
+
+> **Honest scope:** this is a learning / portfolio build in a trial workspace with test data, not a production deployment — one journey is live, the rest are mapped. The repo is the reusable logic; the customer.io workspace shows I can operationalise it — segment by behaviour, branch on state, and personalise the message.
+
 ## License
 
 MIT
